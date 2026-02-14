@@ -5,9 +5,11 @@
 ### Recap dnia 1
 - Git: init, add, commit, branch, merge, push
 - Django: project, views, templates, URL routing
-- pizza_list dziala w przegladarce
+- Otworzylimy gotowy szkielet projektu `pizzeria_django/` (settings, base.html, static)
+- Stworzylismy `menu_app` przez `startapp` i zarejestrowalismy go w INSTALLED_APPS + urls.py
 - `rozwiazanie_weekend2/` jest skopiowany do srodka `pizzeria_django/` - importy dzialaja bez dodatkowej konfiguracji
 - Importy: `from rozwiazanie_weekend2.pizza import Pizza, Menu`, `from rozwiazanie_weekend2 import DATA_DIR`
+- pizza_list dziala w przegladarce
 
 ### SHOW: Detail view z parametrem URL (GENERIC: ksiazka)
 
@@ -135,22 +137,11 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 
 Cel: dodaj wspolny wyglad (nawigacja, Bootstrap) do wszystkich stron pizzerii.
 
-**Krok 1:** Stworz plik `templates/base.html` (w katalogu glownym projektu, NIE w app):
+**Dobra wiadomosc:** `base.html` i `static/css/style.css` sa juz gotowe w szkielecie projektu! Otworz `templates/base.html` i przejrzyj co jest w srodku - nawigacja, Bootstrap CDN, bloki `{% block title %}` i `{% block content %}`.
 
-Skopiuj szablon z sekcji SHOW powyzej (z nawigacja i Bootstrap CDN).
+Teraz zaktualizuj swoje szablony zeby z niego korzystaly:
 
-**Krok 2:** Stworz plik `static/css/style.css`:
-
-```css
-body {
-    background-color: #f8f9fa;
-}
-.navbar-brand {
-    font-weight: bold;
-}
-```
-
-**Krok 3:** Zmien `pizza_list.html` zeby uzywal base.html:
+**Krok 1:** Zmien `pizza_list.html` zeby uzywal base.html:
 
 ```html
 {% extends "base.html" %}
@@ -167,7 +158,7 @@ body {
 {% endblock %}
 ```
 
-**Krok 4:** Zmien tez `pizza_detail.html` - zastap caly prosty HTML na:
+**Krok 2:** Zmien tez `pizza_detail.html` - zastap caly prosty HTML na:
 
 ```html
 {% extends "base.html" %}
@@ -183,12 +174,13 @@ body {
 
 Porownaj z wersja z poprzedniego cwiczenia - zamiast calego `<!DOCTYPE html>...` mamy tylko tresc strony. Reszta (head, nav, bootstrap) jest w `base.html`.
 
-**Krok 5:** Sprawdz! Odswierz strone - powinienes zobaczyc ciemna nawigacje na gorze i ostylowana tresc.
+**Krok 3:** Sprawdz! Odswierz strone - powinienes zobaczyc ciemna nawigacje na gorze i ostylowana tresc.
 
 Jesli widzisz blad "TemplateDoesNotExist: base.html" - sprawdz czy w `settings.py` masz:
 ```python
 TEMPLATES = [{'DIRS': [BASE_DIR / 'templates'], ...}]
 ```
+(To juz powinno byc skonfigurowane w szkielecie)
 
 ---
 
@@ -463,13 +455,33 @@ def customer_add(request):
 
 Cel: zbuduj nowy app do zarzadzania klientami - lista klientow + formularz dodawania (z wyborem typu regular/VIP).
 
-**Krok 1:** Stworz app (jesli jeszcze nie istnieje):
+**Krok 1:** Stworz nowy app:
 
 ```bash
 python3 manage.py startapp customers_app
 ```
 
-Dodaj `'customers_app'` do `INSTALLED_APPS` w `settings.py` (jesli nie ma).
+**WAZNE - 2 kroki konfiguracji (tak samo jak dla menu_app):**
+
+**A)** Dodaj `'customers_app'` do `INSTALLED_APPS` w `settings.py`:
+
+```python
+INSTALLED_APPS = [
+    'django.contrib.staticfiles',
+    'django.contrib.messages',
+    'menu_app',
+    'customers_app',    # <- DODAJ
+]
+```
+
+**B)** Dodaj routing w glownym `pizzeria_project/urls.py`:
+
+```python
+urlpatterns = [
+    path('menu/', include('menu_app.urls')),
+    path('klienci/', include('customers_app.urls')),    # <- DODAJ
+]
+```
 
 **Krok 2:** Stworz `customers_app/views.py`:
 
@@ -535,7 +547,7 @@ urlpatterns = [
 ]
 ```
 
-Upewnij sie ze glowny `urls.py` ma: `path('klienci/', include('customers_app.urls'))`.
+Routing glowny (`pizzeria_project/urls.py`) juz podpielismy w Kroku 1B.
 
 **Krok 4:** Stworz template `customers_app/templates/customers_app/customer_list.html`:
 
@@ -639,13 +651,35 @@ def order_detail(request, order_id):
 
 Cel: zbuduj app do wyswietlania zamowien. Zamowienia sa zapisywane jako JSON - kazde zamowienie laczy klienta z pizzami.
 
-**Krok 1:** Stworz app i pliki:
+**Krok 1:** Stworz nowy app:
 
 ```bash
 python3 manage.py startapp orders_app
 ```
 
-Dodaj `'orders_app'` do `INSTALLED_APPS`. Upewnij sie ze glowny `urls.py` ma: `path('zamowienia/', include('orders_app.urls'))`.
+**WAZNE - 2 kroki konfiguracji (tak samo jak poprzednio):**
+
+**A)** Dodaj `'orders_app'` do `INSTALLED_APPS` w `settings.py`:
+
+```python
+INSTALLED_APPS = [
+    'django.contrib.staticfiles',
+    'django.contrib.messages',
+    'menu_app',
+    'customers_app',
+    'orders_app',    # <- DODAJ
+]
+```
+
+**B)** Dodaj routing w glownym `pizzeria_project/urls.py`:
+
+```python
+urlpatterns = [
+    path('menu/', include('menu_app.urls')),
+    path('klienci/', include('customers_app.urls')),
+    path('zamowienia/', include('orders_app.urls')),    # <- DODAJ
+]
+```
 
 **Krok 2:** Stworz `orders_app/views.py` - zacznij od helperow do odczytu/zapisu zamowien:
 

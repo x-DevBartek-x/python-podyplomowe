@@ -14,14 +14,16 @@
 - Serializacja JSON: to_dict(), from_dict(), save_to_file(), load_from_file()
 - Testy pytest: fixtures, parametrize, pytest.raises
 
-### Prezentacja rozwiazania
+### Zobaczmy rozwiazanie z Weekend 1+2
 
-Pokazac `rozwiazanie_weekend2/`:
+Uruchom rozwiazanie i testy:
 ```bash
-cd 1415-02-2026  # lub katalog nadrzedny wzgledem rozwiazanie_weekend2/
+cd 1415-02-2026
 python3 -m rozwiazanie_weekend2.main
 pytest rozwiazanie_weekend2/ -v
 ```
+
+To jest engine ktory dzisiaj podlaczymy do Django jako backend naszej aplikacji webowej.
 
 ---
 
@@ -83,6 +85,14 @@ git log
 git log --oneline
 ```
 
+### DO: Cwiczenie git basics (20 min)
+
+Otworz `dzien1/git_cwiczenie/README.md` i zrob **Czesc 1: Pierwsze repozytorium**.
+
+Stworz wlasne repo, dodaj pliki, zrob 3 commity. Sprawdz historie przez `git log --oneline`.
+
+---
+
 ### SHOW: Branches (15 min)
 
 ```bash
@@ -124,9 +134,17 @@ git add config.txt && git commit -m "Cena 28"
 
 # Merge - CONFLICT!
 git merge branch-a
-# Otworz config.txt - pokaz markery <<<<< ===== >>>>>
-# Rozwiaz, git add, git commit
+# Otworz config.txt - zobaczysz markery <<<<< ===== >>>>>
+# Rozwiaz konflikt recznie, potem: git add config.txt && git commit
 ```
+
+### DO: Branches i merge (20 min)
+
+Otworz `dzien1/git_cwiczenie/README.md` i zrob **Czesc 2: Branches i merge**.
+
+Stworz branch, dodaj zmiany, zmerge'uj. Opcjonalnie sprowokuj merge conflict i rozwiaz go.
+
+---
 
 ### Git Cheatsheet
 
@@ -178,12 +196,22 @@ PRZYDATNE
 
 ### SHOW: GitHub flow (15 min)
 
-1. Pokaz jak zalozyc konto (screenshot/live)
-2. Fork repozytorium kursu
-3. Clone: `git clone https://github.com/USERNAME/python-podyplomowe.git`
-4. Push: `git push origin main`
+Typowy workflow z GitHubem:
 
-**WAZNE:** Uzyj HTTPS + Personal Access Token (nie SSH na warsztacie)
+1. **Zaloz konto** na https://github.com (jesli nie masz)
+2. **Fork** repozytorium (kopia na Twoim koncie)
+3. **Clone** swojego forka na komputer: `git clone https://github.com/TWOJ-USERNAME/python-podyplomowe.git`
+4. Zrob zmiany, commit, **push**: `git push origin main`
+
+**WAZNE:** Uzywamy HTTPS + Personal Access Token (nie SSH - prostsze na warsztacie).
+
+Jak wygenerowac token: GitHub -> Settings -> Developer settings -> Personal access tokens -> Tokens (classic) -> Generate new token. Zaznacz scope `repo`.
+
+### DO: Fork + clone repozytorium kursu (35 min)
+
+Otworz `dzien1/git_cwiczenie/README.md` i zrob **Czesc 3: GitHub**.
+
+Zrob forka repozytorium kursu, sklonuj go, zrob zmiane i push na swojego forka.
 
 ---
 
@@ -321,30 +349,41 @@ urlpatterns = [
 ]
 ```
 
-### DO: Stworz projekt Django "pizzeria" + pierwszy view
+### DO: Otworz szkielet projektu pizzerii + pierwszy view
 
-Koniec pracy z `mojprojekt` - to bylo tylko demo. Teraz tworzymy **wlasciwy projekt kursu** w ktorym bedziemy budowac aplikacje pizzerii.
+Koniec pracy z `mojprojekt` - to bylo tylko demo. Teraz przechodzimy do **wlasciwego projektu kursu**.
 
-**Krok 1:** Stworz katalog i projekt Django:
+Przygotowalismy dla Was gotowy szkielet projektu Django w katalogu `pizzeria_django/`. Dzieki temu nie musicie powtarzac konfiguracji (settings.py, static files, base template) - to juz jest gotowe. Wy bedziecie tworzyc **appy** (moduly) i pisac **views + templates**.
+
+**Krok 1:** Wejdz do katalogu z projektem:
 
 ```bash
-cd 1415-02-2026    # katalog z rozwiazanie_weekend2/
-mkdir pizzeria_django
-cd pizzeria_django
-django-admin startproject pizzeria_project .
+cd 1415-02-2026/pizzeria_django
 ```
 
-**UWAGA:** Kropka `.` na koncu oznacza "stworz projekt W biezacym katalogu" (zamiast tworzyc kolejny podkatalog). Dzieki temu mamy:
+Zobaczmy co jest w srodku:
 
 ```
 pizzeria_django/
-├── manage.py
-└── pizzeria_project/
-    ├── __init__.py
-    ├── settings.py
-    ├── urls.py
-    └── wsgi.py
+├── manage.py                <- narzedzie CLI (to samo co w mojprojekt!)
+├── pizzeria_project/        <- konfiguracja projektu
+│   ├── settings.py          <- juz skonfigurowane (bez bazy danych, z templates i static)
+│   ├── urls.py              <- glowny routing (na razie pusty - bedziemy dodawac)
+│   └── wsgi.py
+├── templates/
+│   └── base.html            <- gotowy szablon bazowy z Bootstrap (uzyjesz pozniej)
+└── static/
+    └── css/style.css         <- gotowe style CSS
 ```
+
+**Co juz jest skonfigurowane (nie musisz ruszac):**
+- `settings.py`: `DATABASES = {}` (nie uzywamy bazy danych), `TEMPLATES DIRS`, `STATICFILES_DIRS`, `MESSAGE_STORAGE`
+- `base.html`: szablon z nawigacja i Bootstrap CDN (uzyjesz go na Dzien 2)
+
+**Co bedziecie robic sami:**
+- Tworzyc appy (`startapp`)
+- Rejestrowac je w `INSTALLED_APPS`
+- Pisac views, templates, URL routing
 
 **Krok 2:** Sprawdz czy serwer dziala:
 
@@ -352,7 +391,7 @@ pizzeria_django/
 python3 manage.py runserver
 ```
 
-Zignoruj warning o migracjach - nie uzywamy bazy danych. Wejdz na http://127.0.0.1:8000/ - powinienes zobaczyc strone powitalna Django.
+Wejdz na http://127.0.0.1:8000/ - zobaczysz blad 404 (bo nie mamy jeszcze zadnych URL-i). To normalne!
 
 **Krok 3:** Stworz plik `pizzeria_project/views.py` (obok urls.py) i napisz pierwszy view:
 
@@ -383,50 +422,32 @@ urlpatterns = [
 
 ### Gdzie trzymac szablony HTML?
 
-Zanim zaczniemy uzywac szablonow, musimy powiedziec Django gdzie ich szukac.
+Django musi wiedziec gdzie szukac szablonow. Sa dwa miejsca:
 
-**Krok 1:** Stworz katalog `templates/` **obok manage.py** (w katalogu glownym projektu):
-
-```
-mojprojekt/                  <- katalog GLOWNY projektu (tu uruchamiasz manage.py)
-├── manage.py
-├── mojprojekt/              <- paczka konfiguracyjna (ta sama nazwa - to normalne!)
-│   ├── __init__.py
-│   ├── settings.py          <- konfiguracja (tu zmieniasz DIRS)
-│   ├── urls.py              <- routing URL (tu dodajesz path())
-│   ├── views.py             <- STWORZ TEN PLIK! (domyslnie nie istnieje)
-│   └── wsgi.py
-└── templates/               <- STWORZ TEN KATALOG! Obok manage.py
-    └── books/
-        └── book_list.html
-```
-
-**UWAGA 1:** `django-admin startproject mojprojekt` tworzy katalog `mojprojekt/mojprojekt/` (podwojna nazwa). To jest normalne - zewnetrzny to katalog projektu, wewnetrzny to paczka konfiguracyjna Pythona.
-
-**UWAGA 2:** Django NIE tworzy pliku `views.py` w paczce konfiguracyjnej - musisz go stworzyc sam. Katalog `templates/` tez nie istnieje domyslnie.
-
-**Zasada:** Nowe pliki (`views.py`, `templates/`) tworz w odpowiednim miejscu:
-- `views.py` -> wewnatrz paczki konfiguracyjnej (obok `urls.py` i `settings.py`)
-- `templates/` -> w katalogu glownym (obok `manage.py`)
-
-**Krok 2:** W `settings.py` powiedz Django zeby szukal w tym katalogu:
+**1. Katalog globalny `templates/`** (obok manage.py) - dla szablonow wspoldzielonych (np. `base.html`).
+W naszym szkielecie jest juz skonfigurowany w `settings.py`:
 
 ```python
-# settings.py - znajdz sekcje TEMPLATES i zmien DIRS z [] na:
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],    # <- DODAJ TO (domyslnie jest [])
-        'APP_DIRS': True,
-        ...
-    },
-]
+TEMPLATES = [{'DIRS': [BASE_DIR / 'templates'], ...}]
 ```
 
-`BASE_DIR` to sciezka do katalogu z `manage.py` - jest juz zdefiniowana na gorze `settings.py`.
-`BASE_DIR / 'templates'` = szukaj szablonow w katalogu `templates/` obok `manage.py`.
+**2. Katalog w appie `<app>/templates/<app>/`** - dla szablonow specyficznych dla appa.
+Django szuka tam automatycznie gdy `APP_DIRS=True` (juz ustawione).
 
-Bez tej zmiany Django nie wie gdzie szukac szablonow i dostaniesz blad: **TemplateDoesNotExist**.
+```
+pizzeria_django/
+├── templates/                       <- globalny (base.html - juz jest!)
+│   └── base.html
+├── menu_app/
+│   └── templates/menu_app/          <- szablony appa (TY tworzysz)
+│       └── pizza_list.html
+```
+
+Dlaczego podwojna nazwa (`menu_app/templates/menu_app/`)? Django szuka szablonow we **wszystkich** appach naraz. Gdyby dwa appy mialy plik `list.html`, Django nie wiedzialby ktory uzyc. Podkatalog z nazwa appa dziala jak namespace.
+
+**UWAGA:** Jesli dostaniesz blad **TemplateDoesNotExist** - sprawdz czy:
+- App jest dodany do `INSTALLED_APPS` w settings.py
+- Katalog `templates/<app>/` istnieje i nazwa sie zgadza
 
 ### SHOW: Template z kontekstem (GENERIC - lista ksiazek)
 
@@ -481,6 +502,8 @@ Teraz struktura powinna wygladac tak:
 pizzeria_django/
 ├── manage.py
 ├── pizzeria_project/
+├── templates/
+├── static/
 └── rozwiazanie_weekend2/       <- kopia naszego engine z Weekend 1+2
     ├── __init__.py
     ├── pizza.py, customer.py, order.py, exceptions.py
@@ -511,14 +534,31 @@ python3 manage.py startapp menu_app
 
 To stworzy katalog `menu_app/` z plikami: `views.py`, `__init__.py`, `apps.py`, itp.
 
-Dodaj `'menu_app'` do `INSTALLED_APPS` w `pizzeria_project/settings.py`:
+**WAZNE - 2 kroki konfiguracji:**
+
+**A)** Dodaj `'menu_app'` do `INSTALLED_APPS` w `pizzeria_project/settings.py`:
 
 ```python
 INSTALLED_APPS = [
-    ...
-    'menu_app',
+    'django.contrib.staticfiles',
+    'django.contrib.messages',
+    'menu_app',    # <- DODAJ
 ]
 ```
+
+Bez tego Django nie widzi Twojego appu (nie znajdzie szablonow, nie zaladuje konfiguracji).
+
+**B)** Dodaj routing w `pizzeria_project/urls.py`:
+
+```python
+from django.urls import path, include
+
+urlpatterns = [
+    path('menu/', include('menu_app.urls')),
+]
+```
+
+`include('menu_app.urls')` oznacza: "wszystko co zaczyna sie od /menu/ deleguj do menu_app".
 
 **Krok 4: Napisz view pizza_list**
 
@@ -546,13 +586,11 @@ Wyjasnienie importow:
 
 **Krok 5: Stworz katalog na template i plik HTML**
 
-Stworz katalog `menu_app/templates/menu_app/` (tak, podwojna nazwa - to konwencja Django):
+Stworz katalog `menu_app/templates/menu_app/`:
 
 ```bash
 mkdir -p menu_app/templates/menu_app
 ```
-
-Dlaczego podwojna nazwa? Django szuka szablonow we **wszystkich** appach naraz. Gdyby dwa appy mialy plik `list.html`, Django nie wiedzialby ktory uzyc. Podkatalog z nazwa appa (`menu_app/`) dziala jak namespace - rozroznia szablony miedzy appami.
 
 Stworz plik `menu_app/templates/menu_app/pizza_list.html`:
 
@@ -573,7 +611,7 @@ Stworz plik `menu_app/templates/menu_app/pizza_list.html`:
 </html>
 ```
 
-**Krok 6: Dodaj URL-e**
+**Krok 6: Dodaj URL-e w menu_app**
 
 Stworz plik `menu_app/urls.py` (Django go nie tworzy automatycznie):
 
@@ -586,17 +624,7 @@ urlpatterns = [
 ]
 ```
 
-Teraz podepnij app URL-e w glownym `pizzeria_project/urls.py`:
-
-```python
-from django.urls import path, include
-
-urlpatterns = [
-    path('menu/', include('menu_app.urls')),
-]
-```
-
-`include('menu_app.urls')` oznacza: "wszystko co zaczyna sie od /menu/ deleguj do menu_app".
+Routing glowny (`pizzeria_project/urls.py`) juz podpielismy w Kroku 3B.
 
 **Krok 7: Sprawdz!**
 
@@ -615,9 +643,9 @@ Gratulacje - wlasnie podlaczyles swoj engine z Weekend 1+2 do Django!
 ### Co zrobilismy:
 1. Git: init, add, commit, branch, merge
 2. GitHub: fork, clone, push
-3. Django: startproject, runserver
+3. Django: szkielet projektu, startapp, runserver
 4. Pierwszy view + template
-5. pizza_list z rozwiazanie_weekend2/
+5. Integracja rozwiazanie_weekend2/ z Django (pizza_list)
 
 ### Preview dnia 2:
 - Detail views z parametrami URL
