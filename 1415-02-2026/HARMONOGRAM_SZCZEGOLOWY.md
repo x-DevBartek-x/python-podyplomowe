@@ -68,49 +68,48 @@
 
 ## DZIEN 2: Django Full Day
 
-### Blok 1 (8:30-10:30) - Views, Static Files, Forms - 120 min
+### Blok 1 (8:30-10:30) - Detail Views, Static Files, Formularze - 120 min
 
 | Czas | Czas trwania | Temat | Typ |
 |------|-------------|-------|-----|
-| 8:30-8:45 | 15 min | Recap dnia 1, weryfikacja ze Django dziala | Intro |
-| 8:45-9:00 | 15 min | **SHOW:** Detail view z parametrem URL (GENERIC: ksiazka/<int:pk>) | Live coding |
-| 9:00-9:15 | 15 min | **DO:** pizza_detail view z <str:name> | Cwiczenie |
-| 9:15-9:20 | 5 min | **REVIEW:** Omowienie | Review |
-| 9:20-9:35 | 15 min | **SHOW:** Static files + Bootstrap CDN + base.html (extends/block) | Live coding |
-| 9:35-9:55 | 20 min | **DO:** Dodaj base.html z nawigacja, ostyluj pizza pages | Cwiczenie |
-| 9:55-10:00 | 5 min | **REVIEW:** Ostylowana strona | Review |
-| 10:00-10:15 | 15 min | **SHOW:** HTML forms + POST + CSRF + redirect (GENERIC: formularz kontaktowy) | Live coding |
-| 10:15-10:25 | 10 min | **DO:** Formularz dodawania pizzy (name + price) | Cwiczenie |
-| 10:25-10:30 | 5 min | **REVIEW:** Omowienie | Review |
+| 8:30-8:50 | 20 min | Recap dnia 1, sprawdzenie srodowiska, plan dnia 2 | Intro |
+| 8:50-9:05 | 15 min | Teoria: Parametry URL (`<str:name>`, `<int:pk>`) + Http404 | Wyklad |
+| 9:05-9:20 | 15 min | **SHOW:** Detail view (GENERIC: ksiazka/`<int:pk>`) + Http404 | Live coding |
+| 9:20-9:35 | 15 min | **DO:** Cw. 1: pizza_detail z `<str:name>` + PizzaNotFoundError->404 | Cwiczenie |
+| 9:35-9:50 | 15 min | Teoria: Dziedziczenie szablonow (extends/block) + static files + base.html | Wyklad |
+| 9:50-10:00 | 10 min | **DO:** Cw. 2: Ostyluj pizza pages z base.html (extends/block) | Cwiczenie |
+| 10:00-10:15 | 15 min | Teoria: HTTP GET vs POST, CSRF, POST-Redirect-GET, wzorzec formularza | Wyklad |
+| 10:15-10:25 | 10 min | **SHOW:** Formularz kontaktowy (GENERIC) + `{% csrf_token %}` | Live coding |
+| 10:25-10:30 | 5 min | Buffer / Q&A | Dyskusja |
 
 ### Przerwa (10:30-10:40) - 10 min
 
-### Blok 2 (10:40-12:40) - Building Full App - 120 min
+### Blok 2 (10:40-12:40) - Formularz pizzy + customers_app + orders_app - 120 min
 
 | Czas | Czas trwania | Temat | Typ |
 |------|-------------|-------|-----|
-| 10:40-10:55 | 15 min | **SHOW:** Obsluga bledow w views - try/except + user-friendly messages | Live coding |
-| 10:55-11:10 | 15 min | **DO:** Error handling: PizzaNotFoundError->404, walidacja w formularzu | Cwiczenie |
-| 11:10-11:15 | 5 min | **REVIEW:** Omowienie | Review |
-| 11:15-11:30 | 15 min | **SHOW:** Customer views (lista + dodawanie, Customer vs VIPCustomer) | Live coding |
-| 11:30-11:55 | 25 min | **DO:** Zbuduj customers_app: lista + formularz (wybor typu klienta) | Cwiczenie |
-| 11:55-12:00 | 5 min | **REVIEW:** Customer views dzialaja | Review |
-| 12:00-12:10 | 10 min | **SHOW:** Order views - zlozonosc: wybor klienta + wybor pizz | Live coding |
-| 12:10-12:35 | 25 min | **DO:** Zbuduj orders_app: order_list + order_detail (pozycje + total + VIP rabat) | Cwiczenie |
-| 12:35-12:40 | 5 min | Buffer / Q&A | Dyskusja |
+| 10:40-11:05 | 25 min | **DO:** Cw. 3: Formularz dodawania pizzy (POST, walidacja, try/except) | Cwiczenie |
+| 11:05-11:15 | 10 min | **REVIEW:** Formularze - CSRF, kolejnosc URL, obsluga wyjatkow | Review |
+| 11:15-11:20 | 5 min | Teoria: Budowanie kolejnego appa (wzorzec: startapp -> INSTALLED_APPS -> urls.py) | Wyklad |
+| 11:20-11:35 | 15 min | **SHOW:** Customer views - `<select>` typ klienta, Customer vs VIPCustomer | Live coding |
+| 11:35-12:00 | 25 min | **DO:** Cw. 4: Pelne customers_app od zera (lista + formularz z wyborem typu) | Cwiczenie |
+| 12:00-12:05 | 5 min | Teoria: Zamowienia - zlozonosc, laczenie danych z dwoch zrodel, JSON | Wyklad |
+| 12:05-12:15 | 10 min | **SHOW:** Order views - helpery JSON, przygotowanie danych pod template | Live coding |
+| 12:15-12:40 | 25 min | **DO:** Cw. 5: orders_app lista + detail (`<int:order_id>`) | Cwiczenie |
 
 ### Przerwa obiadowa (12:40-13:10) - 30 min
 
-### Blok 3 (13:10-15:00) - Order Flow + Integration - 110 min
+### Blok 3 (13:10-15:00) - Formularz zamowien, Messages, Integracja - 110 min
 
 | Czas | Czas trwania | Temat | Typ |
 |------|-------------|-------|-----|
-| 13:10-13:25 | 15 min | **SHOW:** Formularz zamowienia - select klienta, select pizz + ilosc | Live coding |
-| 13:25-13:50 | 25 min | **DO:** Order creation form + POST handler | Cwiczenie |
-| 13:50-13:55 | 5 min | **REVIEW:** Dzialajace tworzenie zamowien | Review |
-| 13:55-14:10 | 15 min | **SHOW:** Django messages framework + finishing touches | Live coding |
-| 14:10-14:35 | 25 min | **DO:** Pelna integracja - przetestuj caly flow: dodaj klienta -> przegladaj menu -> zloz zamowienie -> zobacz zamowienie | Cwiczenie |
-| 14:35-14:40 | 5 min | **REVIEW:** Demo pelnego flow - wolontariusz screen share | Review |
+| 13:10-13:20 | 10 min | Teoria: Formularz z danymi z wielu zrodel (`<select>` z JSON) | Wyklad |
+| 13:20-13:30 | 10 min | **SHOW:** Order form - select klienta/pizzy, redirect z parametrem | Live coding |
+| 13:30-13:55 | 25 min | **DO:** Cw. 6: Formularz zamowienia (/zamowienia/nowe/) | Cwiczenie |
+| 13:55-14:05 | 10 min | **SHOW:** Django messages framework - messages.success(), typy, base.html | Live coding |
+| 14:05-14:10 | 5 min | **DO:** Cw. 7: Dodaj messages.success() do pizza_add, customer_add, order_create | Cwiczenie |
+| 14:10-14:30 | 20 min | **DO:** Cw. 8: Test end-to-end pelnej aplikacji (menu + klienci + zamowienia + bledy) | Cwiczenie |
+| 14:30-14:40 | 10 min | **REVIEW:** Demo pelnego flow - wolontariusz screen share | Review |
 | 14:40-14:50 | 10 min | Podsumowanie weekendu. Progresja: proceduralne->OOP->wyjatki->testy->git->web. Preview: REST API. | Wyklad |
 | 14:50-14:55 | 5 min | "Commit + push na forka!" | Cwiczenie |
 | 14:55-15:00 | 5 min | Q&A, pozegnanie | Outro |
@@ -125,10 +124,13 @@ Zgodnie z ustalonym wzorcem: SHOW uzywa innej domeny niz DO.
 |--------|----------------|--------------|
 | Pierwszy view | "Witaj swiecie!" HttpResponse | "Witaj w pizzerii!" |
 | Templates | Lista ksiazek ({% for book in books %}) | Pizza list z rozwiazanie_weekend2/ |
-| Detail view | Ksiazka /<int:pk>/ | Pizza detail /<str:name>/ |
-| Forms | Formularz kontaktowy (name + email + message) | Formularz dodawania pizzy |
-| Error handling | Ksiazka nie znaleziona -> custom error | PizzaNotFoundError -> 404 |
-| Customer views | Live coding na pizza app (ten sam pattern) | Pelne customers_app |
+| Detail view + Http404 | Ksiazka /`<int:pk>`/ + Http404 | Pizza detail /`<str:name>`/ + PizzaNotFoundError->404 |
+| Static files + base.html | Przegladnij base.html w szkielecie | Ostyluj pizza pages (extends/block) |
+| Forms + POST | Formularz kontaktowy (name + email + message) | Formularz dodawania pizzy (walidacja + wyjatki) |
+| Customer views | `<select>` typ klienta, Customer vs VIPCustomer | Pelne customers_app od zera |
+| Order views | Helpery JSON, orders_display | orders_app lista + detail |
+| Order form | `<select>` z wielu zrodel (klienci + pizze) | Formularz zamowienia |
+| Messages | messages.success() | Dodaj messages do wszystkich views |
 
 ---
 
