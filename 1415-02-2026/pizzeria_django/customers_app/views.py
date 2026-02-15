@@ -2,6 +2,7 @@ import os
 from django.shortcuts import render, redirect
 from rozwiazanie_weekend2 import DATA_DIR
 from rozwiazanie_weekend2.customer import Customer, VIPCustomer, CustomerManager
+from django.contrib import messages
 
 CUSTOMERS_FILE = os.path.join(DATA_DIR, 'customers.json')
 
@@ -36,6 +37,7 @@ def customer_add(request):
 
             manager.add_customer(customer)
             manager.save_to_file(CUSTOMERS_FILE)
+            messages.success(request, f"Dodano Klienta: {name}")
             return redirect('customer_list')
 
         return render(request, 'customers_app/customer_form.html', {

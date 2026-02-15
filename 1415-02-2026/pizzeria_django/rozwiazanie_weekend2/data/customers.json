@@ -26,5 +26,11 @@
     "id": 4,
     "name": "Michał",
     "phone": "456897231"
+  },
+  {
+    "type": "Customer",
+    "id": 5,
+    "name": "Test",
+    "phone": "123456789"
   }
 ]

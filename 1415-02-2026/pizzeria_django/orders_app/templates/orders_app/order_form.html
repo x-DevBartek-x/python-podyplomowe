@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Nowe zamowienie{% endblock %}
+
+{% block content %}
+<h1>Zloz zamowienie</h1>
+
+{% if errors %}
+<div style="color: red;">
+    {% for error in errors %}
+    <p>{{ error }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    <div>
+        <label>Klient:</label>
+        <select name="customer_id" required>
+            <option value="">-- Wybierz klienta --</option>
+            {% for customer in customers %}
+            <option value="{{ customer.id }}">{{ customer.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <label>Pizza:</label>
+        <select name="pizza_name" required>
+            <option value="">-- Wybierz pizze --</option>
+            {% for pizza in pizzas %}
+            <option value="{{ pizza.name }}">{{ pizza.name }} ({{ pizza.price }} zl)</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <label>Ilosc:</label>
+        <input type="number" name="quantity" min="1" value="1" required>
+    </div>
+    <button type="submit">Zloz zamowienie</button>
+</form>
+
+<a href="/zamowienia/">Powrot do listy</a>
+{% endblock %}

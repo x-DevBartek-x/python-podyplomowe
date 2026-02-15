@@ -6,6 +6,7 @@ from rozwiazanie_weekend2 import DATA_DIR
 from rozwiazanie_weekend2.pizza import Menu
 from rozwiazanie_weekend2.customer import CustomerManager
 from rozwiazanie_weekend2.exceptions import CustomerNotFoundError, PizzaNotFoundError
+from django.contrib import messages
 
 MENU_FILE = os.path.join(DATA_DIR, 'menu.json')
 CUSTOMERS_FILE = os.path.join(DATA_DIR, 'customers.json')
@@ -105,4 +106,68 @@ def order_detail(request, order_id):
         'discount_percent': discount_percent,
         'discount_amount': discount_amount,
         'total': total,
+    })
+
+def order_create(request):
+    menu = Menu()
+    menu.load_from_file(MENU_FILE)
+    customer_mgr = CustomerManager()
+    customer_mgr.load_from_file(CUSTOMERS_FILE)
+
+    if request.method == 'POST':
+        customer_id_str = request.POST.get('customer_id', '')
+        pizza_name = request.POST.get('pizza_name', '')
+        quantity_str = request.POST.get('quantity', '1')
+
+        errors = []
+        if not customer_id_str:
+            errors.append("Wybierz klienta.")
+        if not pizza_name:
+            errors.append("Wybierz pizze.")
+
+        if not errors:
+            try:
+                customer_id = int(customer_id_str)
+                customer = customer_mgr.find_customer(customer_id)
+                pizza = menu.find_pizza(pizza_name)
+                quantity = int(quantity_str)
+
+                # Oblicz rabat VIP
+                discount_percent = None
+                if hasattr(customer, 'discount_percent'):
+                    discount_percent = customer.discount_percent
+
+                # Zapisz zamowienie
+                orders_data = _load_orders()
+                next_id = max((o['id'] for o in orders_data), default=0) + 1
+                new_order = {
+                    'id': next_id,
+                    'customer_id': customer.id,
+                    'items': [{
+                        'pizza_name': pizza.name,
+                        'pizza_price': pizza.price,
+                        'quantity': quantity,
+                    }],
+                    'discount_percent': discount_percent,
+                }
+                orders_data.append(new_order)
+                _save_orders(orders_data)
+                messages.success(request, f"Dodano nowe zamówienie: {next_id}")
+                return redirect('order_detail', order_id=next_id)
+            except CustomerNotFoundError:
+                errors.append("Wybrany klient nie istnieje.")
+            except PizzaNotFoundError:
+                errors.append("Wybrana pizza nie istnieje.")
+            except ValueError:
+                errors.append("Nieprawidlowe dane.")
+
+        return render(request, 'orders_app/order_form.html', {
+            'errors': errors,
+            'pizzas': list(menu),
+            'customers': list(customer_mgr),
+        })
+
+    return render(request, 'orders_app/order_form.html', {
+        'pizzas': list(menu),
+        'customers': list(customer_mgr),
     })

@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from rozwiazanie_weekend2 import DATA_DIR
 from rozwiazanie_weekend2.pizza import Menu, Pizza
 from rozwiazanie_weekend2.exceptions import PizzaNotFoundError, InvalidPriceError, DuplicatePizzaError
+from django.contrib import messages
 
 MENU_FILE = os.path.join(DATA_DIR, 'menu.json')
 
@@ -40,6 +41,7 @@ def pizza_add(request):
                 menu.load_from_file(MENU_FILE)
                 menu.add_pizza(pizza)
                 menu.save_to_file(MENU_FILE)
+                messages.success(request, f"Dodano pizze: {name}")
                 return redirect('pizza_list')
             except (ValueError, TypeError) as e:
                 errors.append(str(e))

@@ -15,7 +15,8 @@
         <td>{{ order.items_count }}</td>
         <td>{{ order.total }} zl</td>
     </tr>
-    {% endfor %}
+       {% endfor %}
+    <a href="/zamowienia/nowe/">Zloz kolejne zamowienie</a>
 </table>
 {% else %}
 <p>Brak zamowien. <a href="/zamowienia/nowe/">Zloz pierwsze zamowienie</a></p>
