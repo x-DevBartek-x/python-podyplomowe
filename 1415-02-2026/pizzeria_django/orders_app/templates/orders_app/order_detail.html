@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Zamowienie #{{ order_id }}{% endblock %}
+
+{% block content %}
+<h1>Zamowienie #{{ order_id }}</h1>
+<p>Klient: {{ customer_name }}</p>
+
+<table>
+    <tr><th>Pizza</th><th>Cena</th><th>Ilosc</th><th>Razem</th></tr>
+    {% for item in items %}
+    <tr>
+        <td>{{ item.pizza_name }}</td>
+        <td>{{ item.pizza_price }} zl</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.total }} zl</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<p>Suma: {{ subtotal }} zl</p>
+{% if discount_percent %}
+<p>Rabat VIP ({{ discount_percent }}%): -{{ discount_amount }} zl</p>
+{% endif %}
+<p><strong>Do zaplaty: {{ total }} zl</strong></p>
+
+<a href="/zamowienia/">Powrot do listy</a>
+{% endblock %}

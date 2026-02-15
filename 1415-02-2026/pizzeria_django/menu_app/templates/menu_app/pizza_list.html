@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Menu{% endblock %}
+
+{% block content %}
+<h1>Menu Pizzerii</h1>
+<ul>
+    <a href="/menu/dodaj/">Dodaj nowa pizze</a>
+{% for pizza in pizzas %}
+    <li><a href="/menu/{{ pizza.name }}/">{{ pizza.name }}</a> - {{ pizza.price }} zl</li>
+{% endfor %}
+</ul>
+{% endblock %}
+

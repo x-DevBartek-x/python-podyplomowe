@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Zamowienia{% endblock %}
+
+{% block content %}
+<h1>Zamowienia</h1>
+
+{% if orders %}
+<table>
+    <tr><th>#</th><th>Klient</th><th>Pozycje</th><th>Suma</th></tr>
+    {% for order in orders %}
+    <tr>
+        <td><a href="/zamowienia/{{ order.id }}/">#{{ order.id }}</a></td>
+        <td>{{ order.customer_name }} {% if order.is_vip %}(VIP){% endif %}</td>
+        <td>{{ order.items_count }}</td>
+        <td>{{ order.total }} zl</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>Brak zamowien. <a href="/zamowienia/nowe/">Zloz pierwsze zamowienie</a></p>
+{% endif %}
+{% endblock %}
