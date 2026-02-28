@@ -5,20 +5,27 @@ from rozwiazanie_weekend2 import DATA_DIR
 from rozwiazanie_weekend2.pizza import Menu, Pizza
 from rozwiazanie_weekend2.exceptions import PizzaNotFoundError, InvalidPriceError, DuplicatePizzaError
 from django.contrib import messages
+from django.shortcuts import render
+from .models import Pizza
+from django.core.exceptions import ValidationError
+from django.db import IntegrityError
 
 MENU_FILE = os.path.join(DATA_DIR, 'menu.json')
 
+# def pizza_list(request):
+#     menu = Menu()
+#     menu.load_from_file(MENU_FILE)
+#     return render(request, 'menu_app/pizza_list.html', {'pizzas': list(menu)})
+
 def pizza_list(request):
-    menu = Menu()
-    menu.load_from_file(MENU_FILE)
-    return render(request, 'menu_app/pizza_list.html', {'pizzas': list(menu)})
+    pizzas = Pizza.objects.all()
+    return render(request, 'menu_app/pizza_list.html', {'pizzas': pizzas})
 
 def pizza_detail(request, name):
-    menu = Menu()
-    menu.load_from_file(MENU_FILE)
+    pizzas = Pizza.objects.all()
     try:
-        pizza = menu.find_pizza(name)
-    except PizzaNotFoundError:
+        pizza = Pizza.objects.get(name=name)
+    except Pizza.DoesNotExist:
         raise Http404(f"Pizza '{name}' nie znaleziona")
     return render(request, 'menu_app/pizza_detail.html', {'pizza': pizza})
 
@@ -36,19 +43,15 @@ def pizza_add(request):
         if not errors:
             try:
                 price = float(price_str)
-                pizza = Pizza(name, price)
-                menu = Menu()
-                menu.load_from_file(MENU_FILE)
-                menu.add_pizza(pizza)
-                menu.save_to_file(MENU_FILE)
-                messages.success(request, f"Dodano pizze: {name}")
+                Pizza.objects.create(name=name, price=price)
+                messages.success(request, f"Dodano pizzę: {name}")
                 return redirect('pizza_list')
-            except (ValueError, TypeError) as e:
-                errors.append(str(e))
-            except InvalidPriceError as e:
-                errors.append(str(e))
-            except DuplicatePizzaError as e:
-                errors.append(str(e))
+            except (ValueError, TypeError):
+                errors.append("Nieprawidlowa cena.")
+            except ValidationError as e:
+                errors.extend(e.messages)
+            except IntegrityError:
+                errors.append(f"Pizza '{name}' juz istnieje!")
 
         return render(request, 'menu_app/pizza_form.html', {
             'errors': errors,

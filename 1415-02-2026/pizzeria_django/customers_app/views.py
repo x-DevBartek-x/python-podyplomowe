@@ -3,15 +3,19 @@ from django.shortcuts import render, redirect
 from rozwiazanie_weekend2 import DATA_DIR
 from rozwiazanie_weekend2.customer import Customer, VIPCustomer, CustomerManager
 from django.contrib import messages
+from .models import Customer
 
 CUSTOMERS_FILE = os.path.join(DATA_DIR, 'customers.json')
 
+# def customer_list(request):
+#     manager = CustomerManager()
+#     manager.load_from_file(CUSTOMERS_FILE)
+#     return render(request, 'customers_app/customer_list.html', {
+#         'customers': list(manager),
+#     })
 def customer_list(request):
-    manager = CustomerManager()
-    manager.load_from_file(CUSTOMERS_FILE)
-    return render(request, 'customers_app/customer_list.html', {
-        'customers': list(manager),
-    })
+    customers = Customer.objects.all().order_by('id')
+    return render(request, 'customers_app/customer_list.html', {'customers': customers})
 
 def customer_add(request):
     if request.method == 'POST':
